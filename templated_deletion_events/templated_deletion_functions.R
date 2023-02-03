@@ -84,8 +84,8 @@ GetHomologousDel <- function(input.df, ref.genome, input.type = c("vcf", "mpileu
       select(POS, REF, ALT, POS.new, del, del.len, del.start, del.end, all_of(other.cols))
   }
   output <- workdf %>%
-    mutate(max.homo.match.up = map2_dbl(POS.new, del.end, ~GetMaxHomoMatch_up(cov2.seq, .x, .y)),
-           max.homo.match.down = map2_dbl(POS.new, del.end, ~GetMaxHomoMatch_down(cov2.seq, .x + 1, .y +1)),
+    mutate(max.homo.match.up = map2_dbl(POS.new, del.end, ~GetMaxHomoMatch_up(ref.genome, .x, .y)),
+           max.homo.match.down = map2_dbl(POS.new, del.end, ~GetMaxHomoMatch_down(ref.genome, .x + 1, .y +1)),
            max.homo.match = max.homo.match.up + max.homo.match.down) %>%
     filter(max.homo.match > 1) %>%
     mutate(homo.start.1 = POS.new + 1 - max.homo.match.up,
